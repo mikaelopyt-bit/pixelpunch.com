@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PixelPunch Gaming Store</title>
+<style>
+:root{--bg:#0a0b14;--bg2:#121428;--card:#161a33;--line:#262b52;--txt:#e8ecff;--mut:#8f97c4;--g:#00ff9c;--b:#00d4ff;--p:#a855f7;--r:#ff3d71}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;line-height:1.5;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;background:radial-gradient(circle at 15% 10%,rgba(168,85,247,.18),transparent 40%),radial-gradient(circle at 85% 30%,rgba(0,212,255,.14),transparent 40%);z-index:-1}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;color:inherit}
+input,select,textarea{font:inherit;background:var(--bg2);border:1px solid var(--line);color:var(--txt);padding:9px 12px;border-radius:10px;width:100%;outline:0}
+input:focus,select:focus,textarea:focus{border-color:var(--b);box-shadow:0 0 0 3px rgba(0,212,255,.15)}
+.wrap{max-width:1250px;margin:auto;padding:0 18px}
+.btn{position:relative;overflow:hidden;padding:10px 18px;border-radius:10px;font-weight:700;transition:.25s;background:var(--bg2);border:1px solid var(--line)}
+.btn:hover{transform:translateY(-2px);border-color:var(--b)}
+.btn.pri{background:linear-gradient(90deg,var(--g),var(--b));color:#04121a;border:0}
+.btn.pri:hover{box-shadow:0 6px 24px rgba(0,255,156,.35)}
+.btn.sec{background:linear-gradient(90deg,var(--p),var(--r));border:0}
+.btn.sec:hover{box-shadow:0 6px 24px rgba(168,85,247,.45)}
+.btn.sm{padding:7px 12px;font-size:.85rem}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.4);transform:scale(0);animation:rip .6s linear;pointer-events:none}
+@keyframes rip{to{transform:scale(4);opacity:0}}
+header{position:sticky;top:0;z-index:50;background:rgba(10,11,20,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:14px;padding:12px 0;flex-wrap:wrap}
+.logo{font-weight:900;font-size:1.4rem;letter-spacing:1px;background:linear-gradient(90deg,var(--g),var(--b),var(--p));-webkit-background-clip:text;background-clip:text;color:transparent}
+.links{display:flex;gap:4px;flex-wrap:wrap}
+.links a{padding:6px 11px;border-radius:8px;color:var(--mut);font-size:.92rem;transition:.2s}
+.links a:hover{color:var(--g);background:var(--bg2)}
+.navsearch{flex:1;min-width:180px}
+.icobtn{background:var(--bg2);border:1px solid var(--line);padding:9px 13px;border-radius:10px;position:relative;transition:.2s}
+.icobtn:hover{border-color:var(--g)}
+.badge{position:absolute;top:-7px;right:-7px;background:var(--r);border-radius:20px;font-size:.7rem;padding:1px 6px;font-weight:700}
+.bump{animation:bump .4s}
+@keyframes bump{50%{transform:scale(1.35)}}
+.hero{padding:70px 0 50px;display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center}
+.hero h1{font-size:clamp(2rem,5vw,3.7rem);line-height:1.08;font-weight:900}
+.hero h1 span{background:linear-gradient(90deg,var(--g),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mut);margin:16px 0 24px;max-width:520px}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+.stats{display:flex;gap:24px;margin-top:30px;flex-wrap:wrap}
+.stats b{font-size:1.5rem;color:var(--g);display:block}
+.stats small{color:var(--mut)}
+.float-area{position:relative;height:340px}
+.fl{position:absolute;font-size:4rem;animation:flo 5s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(0,212,255,.6))}
+@keyframes flo{50%{transform:translateY(-22px) rotate(8deg)}}
+.glow-ring{position:absolute;inset:40px;border-radius:50%;border:2px dashed var(--p);opacity:.5;animation:spin 25s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.marquee{overflow:hidden;border-block:1px solid var(--line);background:var(--bg2);padding:10px 0;white-space:nowrap}
+.marquee div{display:inline-block;animation:mq 28s linear infinite;color:var(--g);font-weight:600}
+@keyframes mq{to{transform:translateX(-50%)}}
+section{padding:46px 0}
+h2.title{font-size:1.8rem;margin-bottom:6px}
+h2.title:after{content:"";display:block;width:60px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--g),var(--p));margin-top:6px}
+.sub{color:var(--mut);margin-bottom:22px}
+.cats{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.catbox{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;transition:.3s}
+.catbox:hover{border-color:var(--b);transform:translateY(-4px)}
+.catbox h3{margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:6px 12px;border-radius:20px;background:var(--bg2);border:1px solid var(--line);font-size:.85rem;color:var(--mut);transition:.2s}
+.chip:hover,.chip.on{background:var(--g);color:#04121a;border-color:var(--g)}
+.shop{display:grid;grid-template-columns:260px 1fr;gap:22px}
+.filters{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;height:fit-content;position:sticky;top:82px}
+.filters label{display:block;font-size:.8rem;color:var(--mut);margin:12px 0 4px;text-transform:uppercase;letter-spacing:.5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:.3s;opacity:0;transform:translateY(22px)}
+.card.show{opacity:1;transform:none}
+.card:hover{border-color:var(--g);box-shadow:0 10px 30px rgba(0,255,156,.12);transform:translateY(-6px)}
+.pic{height:155px;overflow:hidden;display:grid;place-items:center;font-size:3.6rem;position:relative;background:linear-gradient(135deg,rgba(168,85,247,.3),rgba(0,212,255,.2))}
+.pic svg{width:80%;height:100%;transition:.35s;filter:drop-shadow(0 6px 10px rgba(0,0,0,.45))}
+.pic img.pimg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8px;transition:.35s;background:var(--card)}
+.card:hover .pic svg{transform:scale(1.12) rotate(-3deg)}
+.card:hover .pic img.pimg{transform:scale(1.08)}
+.ci .em{width:46px;height:46px;border-radius:8px;overflow:hidden;position:relative;background:var(--bg2)}
+.ci .em svg{width:100%;height:100%}
+.ci .em img.pimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tag{position:absolute;top:8px;left:8px;font-size:.7rem;padding:2px 9px;border-radius:20px;font-weight:700}
+.tag.used{background:var(--p)}.tag.new{background:var(--g);color:#04121a}
+.tag.pl{left:auto;right:8px;background:rgba(0,0,0,.5)}
+.info{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.info h4{font-size:.98rem;line-height:1.25;cursor:pointer}
+.info h4:hover{color:var(--b)}
+.meta{color:var(--mut);font-size:.78rem}
+.stars{color:#ffc933;font-size:.85rem}
+.price{font-size:1.2rem;font-weight:800;color:var(--g)}
+.acts{display:flex;gap:6px;margin-top:auto}
+.acts .btn{flex:1;padding:8px 6px;font-size:.82rem}
+.empty{grid-column:1/-1;text-align:center;color:var(--mut);padding:50px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cal{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.ev{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.ev .cd{display:flex;gap:6px;margin-top:10px}
+.ev .cd div{background:var(--bg2);border-radius:8px;padding:5px 8px;text-align:center;min-width:46px}
+.ev .cd b{display:block;color:var(--b);font-size:1.1rem}
+.ev .cd small{font-size:.65rem;color:var(--mut)}
+.res{margin-top:14px;padding:14px;border-radius:12px;background:var(--bg2);border:1px dashed var(--g)}
+.ok{color:var(--g)}.bad{color:var(--r)}
+.build-row{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:center;margin-bottom:10px}
+.rev{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.rev img{max-width:180px;border-radius:10px;margin-top:8px;display:block}
+.starpick span{font-size:1.6rem;cursor:pointer;color:#555;transition:.15s}
+.starpick span.on{color:#ffc933}
+.starpick span:hover{transform:scale(1.25)}
+.loy{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.tier{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center}
+.tier b{font-size:1.4rem;color:var(--p);display:block}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:10px}
+summary{cursor:pointer;font-weight:600}
+details p{color:var(--mut);margin-top:8px}
+footer{background:var(--bg2);border-top:1px solid var(--line);padding:36px 0 20px;margin-top:30px}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px}
+.fgrid h5{margin-bottom:8px;color:var(--g)}
+.fgrid a,.fgrid p{display:block;color:var(--mut);font-size:.9rem;margin:4px 0}
+.fgrid a:hover{color:var(--b)}
+.pay{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pay span{background:#fff;color:#111;font-weight:800;font-size:.72rem;padding:6px 10px;border-radius:6px}
+.pay span.j{background:#e4002b;color:#fff}.pay span.e{background:#00b140;color:#fff}.pay span.c{background:#ffb400}.pay span.v{background:#1a1f71;color:#fff}.pay span.m{background:#eb001b;color:#fff}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);z-index:90;display:none;align-items:center;justify-content:center;padding:16px}
+.overlay.open{display:flex;animation:fade .25s}
+@keyframes fade{from{opacity:0}}
+.modal{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;max-width:620px;width:100%;max-height:90vh;overflow:auto;animation:pop .3s}
+@keyframes pop{from{transform:scale(.9);opacity:0}}
+.modal h3{margin-bottom:12px}
+.x{float:right;background:var(--bg2);border-radius:8px;padding:4px 10px}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.9rem}
+th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--b)}
+.drawer{position:fixed;top:0;right:-440px;width:min(420px,100%);height:100%;background:var(--card);border-left:1px solid var(--line);z-index:95;transition:.35s;display:flex;flex-direction:column;padding:18px}
+.drawer.open{right:0}
+.items{flex:1;overflow:auto;margin:14px 0}
+.ci{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ci .em{font-size:2rem}
+.qty{display:flex;align-items:center;gap:6px;margin-top:4px}
+.qty button{background:var(--bg2);width:26px;height:26px;border-radius:6px}
+.row{display:flex;justify-content:space-between;margin:6px 0}
+.paym{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.paym label{display:flex;gap:8px;align-items:center;background:var(--bg2);border:1px solid var(--line);padding:9px;border-radius:10px;cursor:pointer;font-size:.88rem}
+.paym input{width:auto}
+.paym label:has(input:checked){border-color:var(--g)}
+.steps{display:flex;gap:4px;margin:8px 0}
+.steps i{flex:1;height:6px;border-radius:4px;background:var(--line);font-style:normal}
+.steps i.on{background:var(--g)}
+.code{font-family:monospace;background:var(--bg2);padding:4px 8px;border-radius:6px;color:var(--b);letter-spacing:1px}
+.toasts{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;align-items:center}
+.toast{background:var(--g);color:#04121a;font-weight:700;padding:10px 18px;border-radius:30px;animation:tin .3s,tout .4s 2.2s forwards;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.toast.err{background:var(--r);color:#fff}
+@keyframes tin{from{transform:translateY(20px);opacity:0}}
+@keyframes tout{to{opacity:0;transform:translateY(-10px)}}
+.chatfab{position:fixed;right:18px;bottom:18px;z-index:80;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--b));font-size:1.5rem;box-shadow:0 8px 24px rgba(168,85,247,.5);animation:pulse 2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 14px rgba(168,85,247,0)}}
+.chat{position:fixed;right:18px;bottom:84px;width:min(340px,calc(100% - 36px));height:420px;background:var(--card);border:1px solid var(--line);border-radius:16px;z-index:80;display:none;flex-direction:column;overflow:hidden}
+.chat.open{display:flex;animation:pop .3s}
+.chat header{position:static;padding:12px;background:linear-gradient(90deg,var(--p),var(--b));font-weight:700;border:0}
+.msgs{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.m{max-width:85%;padding:8px 12px;border-radius:12px;font-size:.88rem}
+.m.bot{background:var(--bg2)}.m.me{background:var(--b);color:#04121a;align-self:flex-end}
+.quick{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 8px}
+.chatin{display:flex;gap:6px;padding:10px;border-top:1px solid var(--line)}
+.reveal{opacity:0;transform:translateY(30px);transition:.7s}
+.reveal.show{opacity:1;transform:none}
+@media(max-width:850px){.hero,.shop,.two,.cats{grid-template-columns:1fr}.filters{position:static}.float-area{height:220px}.links{display:none}}
+</style>
+</head>
+<body>
+
+<header>
+<div class="wrap nav">
+  <a href="#top" class="logo">⚡ PIXELPUNCH</a>
+  <nav class="links">
+    <a href="#shop">Shop</a><a href="#calendar">Releases</a><a href="#tradein">Trade-In</a><a href="#builder">PC Builder</a><a href="#reviews">Reviews</a><a href="#loyalty">Rewards</a><a href="#faq">FAQ</a>
+  </nav>
+  <input class="navsearch" id="navSearch" placeholder="🔍 Search PS5, GPU, Switch, Game Pass...">
+  <button class="icobtn" id="accBtn">👤 <span id="accName">Login</span></button>
+  <button class="icobtn" id="cartBtn">🛒<span class="badge" id="cartCount">0</span></button>
+</div>
+</header>
+
+<main id="top">
+<div class="wrap hero">
+  <div>
+    <h1>Level Up for <span>Less Than 100K</span></h1>
+    <p>Pakistan's budget gaming store. Consoles, handhelds, GPUs, CPUs, retro systems, discs and digital codes. New and 2nd hand, every item priced under Rs. 100,000.</p>
+    <div class="cta">
+      <a href="#shop" class="btn pri">Shop Now</a>
+      <a href="#builder" class="btn sec">Build a PC</a>
+      <a href="#tradein" class="btn">Trade In Old Gear</a>
+    </div>
+    <div class="stats"><div><b data-count="60">0</b><small>Products</small></div><div><b data-count="100">0</b><small>Max price (K PKR)</small></div><div><b data-count="12">0</b><small>Months warranty on new</small></div></div>
+  </div>
+  <div class="float-area">
+    <div class="glow-ring"></div>
+    <div class="fl" style="left:8%;top:10%">🎮</div>
+    <div class="fl" style="left:55%;top:0;animation-delay:-1s">🕹️</div>
+    <div class="fl" style="left:30%;top:42%;animation-delay:-2s;font-size:5rem">🖥️</div>
+    <div class="fl" style="left:70%;top:50%;animation-delay:-3s">🎧</div>
+    <div class="fl" style="left:2%;top:72%;animation-delay:-4s">💿</div>
+  </div>
+</div>
+<div class="marquee"><div id="mq"></div></div>
+
+<section><div class="wrap reveal">
+  <h2 class="title">Browse by Category</h2>
+  <p class="sub">Hardware and software are separated so you find things fast.</p>
+  <div class="cats">
+    <div class="catbox"><h3>🧰 Hardware</h3><div class="chips">
+      <button class="chip" data-quick="type:console">Consoles</button><button class="chip" data-quick="type:handheld">Handhelds</button><button class="chip" data-quick="type:pc">Gaming PCs</button><button class="chip" data-quick="type:gpu">Graphics Cards</button><button class="chip" data-quick="type:cpu">Processors</button><button class="chip" data-quick="type:monitor">Monitors</button><button class="chip" data-quick="type:periph">Controllers &amp; Peripherals</button><button class="chip" data-quick="type:chair">Chairs</button></div></div>
+    <div class="catbox"><h3>💿 Software</h3><div class="chips">
+      <button class="chip" data-quick="type:disc">Physical Discs</button><button class="chip" data-quick="type:digital">Digital Keys</button><button class="chip" data-quick="type:wallet">Wallet Top-ups</button><button class="chip" data-quick="type:sub">Subscriptions</button><button class="chip" data-quick="type:dlc">DLC</button></div></div>
+  </div>
+</div></section>
+
+<section id="shop"><div class="wrap reveal">
+  <h2 class="title">The Store</h2>
+  <p class="sub">Fast search, smart filters. All prices in PKR (Rs.).</p>
+  <div class="shop">
+    <aside class="filters">
+      <b>Filters</b>
+      <label>Search</label><input id="fSearch" placeholder="Name, brand or spec">
+      <label>Category</label>
+      <select id="fCat"><option value="">All</option><option value="hardware">Hardware</option><option value="software">Software</option></select>
+      <label>Type</label>
+      <select id="fType"><option value="">All types</option><option value="console">Consoles</option><option value="handheld">Handhelds</option><option value="pc">Gaming PCs</option><option value="gpu">Graphics Cards</option><option value="cpu">Processors</option><option value="monitor">Monitors</option><option value="periph">Peripherals</option><option value="chair">Chairs</option><option value="disc">Physical Discs</option><option value="digital">Digital Keys</option><option value="wallet">Wallet Top-ups</option><option value="sub">Subscriptions</option><option value="dlc">DLC</option></select>
+      <label>Platform</label>
+      <select id="fPlat"><option value="">All</option><option>PC</option><option>PlayStation</option><option>Xbox</option><option>Nintendo</option><option>Handheld PC</option></select>
+      <label>Brand</label><select id="fBrand"><option value="">All brands</option></select>
+      <label>Condition</label>
+      <select id="fCond"><option value="">New &amp; Used</option><option>New</option><option>Used</option></select>
+      <label>Max price: <b id="pv">Rs. 100,000</b></label>
+      <input type="range" id="fPrice" min="1000" max="100000" step="500" value="100000">
+      <label>Spec shortcuts</label>
+      <div class="chips" id="specChips"></div>
+      <label>Sort</label>
+      <select id="fSort"><option value="rel">Featured</option><option value="pa">Price: low to high</option><option value="pd">Price: high to low</option><option value="rt">Top rated</option></select>
+      <button class="btn sm" id="reset" style="width:100%;margin-top:14px">Reset filters</button>
+    </aside>
+    <div><div class="meta" id="count" style="margin-bottom:10px"></div><div class="grid" id="grid"></div></div>
+  </div>
+</div></section>
+
+<section id="calendar"><div class="wrap reveal">
+  <h2 class="title">Pre-Order &amp; Release Calendar</h2>
+  <p class="sub">Upcoming drops, restocks and pre-orders with live countdowns (demo schedule).</p>
+  <div class="cal" id="cal"></div>
+</div></section>
+
+<section id="tradein"><div class="wrap reveal">
+  <h2 class="title">Trade-In / Upgrade Calculator</h2>
+  <p class="sub">Estimate what your old gear is worth toward your next purchase.</p>
+  <div class="two">
+    <div class="panel">
+      <label class="meta">Your old device</label>
+      <select id="tiDev"></select>
+      <label class="meta" style="display:block;margin-top:10px">Condition</label>
+      <select id="tiCond"><option value="1">Excellent (like new)</option><option value=".8">Good</option><option value=".6">Fair (scratches / wear)</option><option value=".35">Poor / not working</option></select>
+      <label class="meta" style="display:block;margin-top:10px">Upgrade to</label>
+      <select id="tiNew"></select>
+      <button class="btn pri" id="tiGo" style="margin-top:14px;width:100%">Calculate</button>
+    </div>
+    <div class="panel"><div id="tiRes" class="res">Pick your devices and press Calculate.</div></div>
+  </div>
+</div></section>
+
+<section id="builder"><div class="wrap reveal">
+  <h2 class="title">Build-a-PC Compatibility Tool</h2>
+  <p class="sub">Choose parts. We flag compatibility problems automatically.</p>
+  <div class="two">
+    <div class="panel" id="bForm"></div>
+    <div class="panel"><div id="bRes" class="res"></div><button class="btn pri" id="bAdd" style="width:100%;margin-top:12px">Add whole build to cart</button></div>
+  </div>
+</div></section>
+
+<section id="reviews"><div class="wrap reveal">
+  <h2 class="title">Customer Reviews &amp; Setup Photos</h2>
+  <p class="sub">Real buyers, real rigs. Leave your own rating and photo.</p>
+  <div class="two">
+    <div id="revList"></div>
+    <div class="panel">
+      <h3 style="margin-bottom:10px">Write a review</h3>
+      <input id="rvName" placeholder="Your name"><br><br>
+      <div class="starpick" id="starPick"></div>
+      <textarea id="rvText" rows="3" placeholder="Tell us about your gear..." style="margin:8px 0"></textarea>
+      <label class="meta">Upload your setup photo (optional)</label>
+      <input type="file" id="rvPhoto" accept="image/*" style="margin:6px 0 12px">
+      <button class="btn pri" id="rvSend">Post review</button>
+    </div>
+  </div>
+</div></section>
+
+<section id="loyalty"><div class="wrap reveal">
+  <h2 class="title">Loyalty &amp; Rewards</h2>
+  <p class="sub">Earn 1 point per Rs. 100 spent, +20 for each review. 100 points = Rs. 100 off.</p>
+  <div class="loy">
+    <div class="tier"><b>🥉 Rookie</b>0 – 499 pts<br><small class="meta">Birthday discount</small></div>
+    <div class="tier"><b>🥈 Pro</b>500 – 1,499 pts<br><small class="meta">Free delivery always</small></div>
+    <div class="tier"><b>🥇 Legend</b>1,500+ pts<br><small class="meta">Early restock access</small></div>
+    <div class="tier"><b id="myPts">0</b>Your points<br><button class="btn sm" id="redeemBtn" style="margin-top:8px">Use at checkout</button></div>
+  </div>
+</div></section>
+
+<section id="faq"><div class="wrap reveal">
+  <h2 class="title">FAQ &amp; Policies</h2><p class="sub">&nbsp;</p>
+  <details><summary>How do I redeem a digital code?</summary><p>Open your account dashboard, go to Orders, and press "Reveal code". Then enter it on the Steam, PlayStation Store, Xbox or Nintendo eShop redeem page of the matching region.</p></details>
+  <details><summary>What warranty do used items have?</summary><p>Used hardware has 7 days checking warranty and 1 month service warranty. New hardware has up to 12 months.</p></details>
+  <details><summary>Can I return an item?</summary><p>Yes, within 7 days if it is not as described. Opened digital codes and discs are not returnable.</p></details>
+  <details><summary>Can I cancel a pre-order?</summary><p>Yes, anytime before the item ships. You get a full refund within 5 working days.</p></details>
+  <details><summary>Do you offer cash on delivery?</summary><p>Yes, COD is available in major cities. Other options: JazzCash, Easypaisa, bank transfer and cards.</p></details>
+</div></section>
+</main>
+
+<footer>
+<div class="wrap">
+  <div class="fgrid">
+    <div><div class="logo">⚡ PIXELPUNCH</div><p>Budget gaming for everyone. Every item under Rs. 100,000.</p></div>
+    <div><h5>Shop</h5><a href="#shop" data-quick="type:console">Consoles</a><a href="#shop" data-quick="type:gpu">Graphics Cards</a><a href="#shop" data-quick="type:disc">Games</a></div>
+    <div><h5>Support</h5><a href="#faq">FAQ</a><a href="#" id="fChat">Live chat</a><a href="#" id="fTrack">Track order</a></div>
+    <div><h5>We accept</h5><div class="pay"><span class="j">JazzCash</span><span class="e">Easypaisa</span><span class="v">VISA</span><span class="m">Mastercard</span><span class="c">COD</span><span>Bank Transfer</span></div></div>
+  </div>
+  <p class="meta" style="text-align:center;margin-top:24px">© 2026 PixelPunch. Demo storefront. Brand names belong to their owners.</p>
+</div>
+</footer>
+
+<!-- Detail modal -->
+<div class="overlay" id="oDetail"><div class="modal" id="mDetail"></div></div>
+<!-- Checkout -->
+<div class="overlay" id="oCheck"><div class="modal">
+  <button class="x" data-close>✕</button><h3>Checkout</h3>
+  <div id="coItems"></div>
+  <div class="two" style="gap:10px;margin-top:10px">
+    <input id="coName" placeholder="Full name"><input id="coPhone" placeholder="Phone (03xx-xxxxxxx)">
+  </div>
+  <input id="coAddr" placeholder="Address (digital-only orders can skip)" style="margin-top:10px">
+  <select id="coCity" style="margin-top:10px"><option>Karachi</option><option>Lahore</option><option>Islamabad</option><option>Rawalpindi</option><option>Faisalabad</option><option>Peshawar</option><option>Quetta</option><option>Multan</option><option>Other</option></select>
+  <b style="display:block;margin-top:12px">Payment method</b>
+  <div class="paym">
+    <label><input type="radio" name="pm" value="Cash on Delivery" checked>💵 Cash on Delivery</label>
+    <label><input type="radio" name="pm" value="JazzCash">📱 JazzCash</label>
+    <label><input type="radio" name="pm" value="Easypaisa">📱 Easypaisa</label>
+    <label><input type="radio" name="pm" value="Card">💳 Credit / Debit Card</label>
+    <label><input type="radio" name="pm" value="Bank Transfer">🏦 Bank Transfer</label>
+  </div>
+  <div id="coTotals"></div>
+  <button class="btn pri" id="coPlace" style="width:100%;margin-top:12px">Place Order</button>
+</div></div>
+<!-- Account -->
+<div class="overlay" id="oAcc"><div class="modal" id="mAcc"></div></div>
+
+<!-- Cart drawer -->
+<aside class="drawer" id="drawer">
+  <div><button class="x" data-closedrawer>✕</button><h3>🛒 Your Cart</h3></div>
+  <div class="items" id="cartItems"></div>
+  <div id="cartTotals"></div>
+  <button class="btn pri" id="goCheckout" style="margin-top:10px">Checkout</button>
+  <button class="btn sm" id="clearCart" style="margin-top:8px">Clear cart</button>
+</aside>
+
+<!-- Chat -->
+<button class="chatfab" id="chatFab">💬</button>
+<div class="chat" id="chat">
+  <header>🎧 PixelPunch Support</header>
+  <div class="msgs" id="msgs"></div>
+  <div class="quick" id="quick"></div>
+  <div class="chatin"><input id="chatIn" placeholder="Type a message..."><button class="btn pri sm" id="chatSend">Send</button></div>
+</div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const fmt=n=>'Rs. '+Math.round(n).toLocaleString('en-PK');
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function toast(t,err){const d=document.createElement('div');d.className='toast'+(err?' err':'');d.textContent=t;$('#toasts').appendChild(d);setTimeout(()=>d.remove(),2700)}
+document.addEventListener('click',e=>{const b=e.target.closest('.btn');if(!b)return;const r=document.createElement('span');r.className='ripple';const bb=b.getBoundingClientRect(),s=Math.max(bb.width,bb.height);r.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-bb.left-s/2}px;top:${e.clientY-bb.top-s/2}px`;b.appendChild(r);setTimeout(()=>r.remove(),600)});
+
+/* ---------- products (all under 100,000) ---------- */
+const E3=[['Standard','Game disc / key only'],['Deluxe','Game + bonus digital pack (skins, soundtrack)'],['Collector','Game + steelbook case + art book + bonus pack']];
+const P=[
+// consoles
+[1,'PlayStation 5 Slim Digital 1TB (2nd Hand)','hardware','console','PlayStation','Sony',92000,'Used','🎮',['825GB-1TB SSD','4K 120Hz','Digital only'],'Checked and tested. Includes 1 DualSense and all cables. 1 month service warranty.',4.8],
+[2,'PlayStation 5 Disc Edition (2nd Hand)','hardware','console','PlayStation','Sony',98000,'Used','🎮',['825GB SSD','4K 120Hz','Disc drive'],'Disc edition with controller, HDMI 2.1 cable and power cord.',4.7],
+[3,'PlayStation 4 Pro 1TB (2nd Hand)','hardware','console','PlayStation','Sony',38000,'Used','🎮',['1TB HDD','4K upscaling'],'Pro model with controller. Great for the huge PS4 library.',4.6],
+[4,'PlayStation 4 Slim 500GB (2nd Hand)','hardware','console','PlayStation','Sony',29000,'Used','🎮',['500GB','1080p'],'Budget PS4 with 1 controller.',4.5],
+[5,'PlayStation 3 Slim 250GB + 2 Controllers','hardware','console','PlayStation','Sony',14500,'Used','🎮',['250GB','Blu-ray'],'Classic PS3 with two controllers.',4.3],
+[6,'PlayStation 2 Slim (2nd Hand)','hardware','console','PlayStation','Sony',9500,'Used','🕹️',['Retro','DVD'],'Slim PS2, 1 controller, memory card.',4.4],
+[7,'PlayStation 1 PSone (2nd Hand)','hardware','console','PlayStation','Sony',7500,'Used','🕹️',['Retro','CD-ROM'],'Compact PSone with controller and AV cable.',4.2],
+[8,'Xbox Original (2nd Hand)','hardware','console','Xbox','Microsoft',11000,'Used','🕹️',['Retro','8GB HDD'],'Original Xbox with controller S.',4.1],
+[9,'Xbox 360 Slim 250GB (2nd Hand)','hardware','console','Xbox','Microsoft',16500,'Used','🎮',['250GB','HD'],'Xbox 360 Slim with 1 wireless controller.',4.4],
+[10,'Xbox One S 1TB (2nd Hand)','hardware','console','Xbox','Microsoft',31000,'Used','🎮',['1TB','4K video'],'Xbox One S with controller.',4.5],
+[11,'Xbox Series S 512GB (New)','hardware','console','Xbox','Microsoft',74000,'New','🎮',['512GB SSD','1440p','120Hz'],'Brand new, sealed. 12 months warranty.',4.7],
+[12,'Xbox Series X 1TB (2nd Hand)','hardware','console','Xbox','Microsoft',96000,'Used','🎮',['1TB SSD','4K 120Hz'],'Most powerful Xbox. Tested with controller.',4.8],
+[13,'Nintendo Switch V2 (2nd Hand)','hardware','console','Nintendo','Nintendo',45000,'Used','🎮',['32GB','6.2" screen'],'Switch 1 with dock, 2 Joy-Con and cables.',4.6],
+[14,'Nintendo Switch Lite (New)','hardware','handheld','Nintendo','Nintendo',42000,'New','🎮',['32GB','Handheld only'],'Sealed Switch 1 Lite. 6 month warranty.',4.5],
+[15,'Nintendo Switch OLED (2nd Hand)','hardware','console','Nintendo','Nintendo',62000,'Used','🎮',['64GB','7" OLED'],'OLED Switch 1 with dock and Joy-Con.',4.8],
+[16,'Nintendo Switch 2 (2nd Hand)','hardware','console','Nintendo','Nintendo',97000,'Used','🎮',['256GB','8" 120Hz LCD'],'Switch 2 console with dock, tested and boxed.',4.8],
+[17,'ASUS ROG Ally (Z1 Extreme) (2nd Hand)','hardware','handheld','Handheld PC','ASUS',78000,'Used','🕹️',['7" 120Hz','Ryzen Z1','512GB'],'ROG Ally 1 with charger and case.',4.6],
+[18,'ASUS ROG Ally 2 / Ally X (2nd Hand)','hardware','handheld','Handheld PC','ASUS',98500,'Used','🕹️',['7" 120Hz','24GB RAM','1TB'],'Newer ROG Ally with bigger battery. Tested.',4.7],
+[19,'Steam Deck LCD 256GB (2nd Hand)','hardware','handheld','Handheld PC','Valve',72000,'Used','🕹️',['7" LCD','256GB'],'Steam Deck with case and charger.',4.7],
+[20,'Steam Deck OLED 512GB (2nd Hand)','hardware','handheld','Handheld PC','Valve',98000,'Used','🕹️',['7.4" OLED','90Hz','512GB'],'OLED Steam Deck with charger. Tested.',4.9],
+// PCs
+[21,'Budget Gaming PC: Ryzen 5 3600 + GTX 1650','hardware','pc','PC','Built',54000,'Used','🖥️',['Ryzen 5 3600','GTX 1650','16GB RAM','512GB SSD'],'Pre-built 1080p esports PC with Windows installed.',4.4],
+[22,'Gaming PC: Ryzen 5 5600 + RTX 3060 12GB','hardware','pc','PC','Built',99000,'New','🖥️',['Ryzen 5 5600','RTX 3060 12GB','16GB DDR4','1TB NVMe'],'Brand new 1080p/1440p gaming PC. Fully built and tested.',4.8],
+[23,'Mid Build: i5-12400F + RX 6600','hardware','pc','PC','Built',95000,'New','🖥️',['i5-12400F','RX 6600','16GB DDR4','500GB NVMe'],'Balanced build with tempered glass case.',4.6],
+// GPUs
+[24,'NVIDIA GTX 1650 4GB (2nd Hand)','hardware','gpu','PC','NVIDIA',18500,'Used','🟩',['4GB GDDR5','No power cable'],'Efficient esports GPU.',4.2],
+[25,'NVIDIA GTX 1660 Super 6GB (2nd Hand)','hardware','gpu','PC','NVIDIA',29000,'Used','🟩',['6GB GDDR6','1080p'],'Great value 1080p card.',4.5],
+[26,'NVIDIA RTX 3050 6GB (New)','hardware','gpu','PC','NVIDIA',49000,'New','🟩',['6GB','Ray tracing','DLSS'],'Entry RTX card with warranty.',4.3],
+[27,'NVIDIA RTX 3060 12GB (2nd Hand)','hardware','gpu','PC','NVIDIA',58000,'Used','🟩',['12GB GDDR6','Ray tracing','DLSS'],'Popular 1080p/1440p GPU.',4.7],
+[28,'NVIDIA RTX 4060 8GB (New)','hardware','gpu','PC','NVIDIA',96000,'New','🟩',['8GB GDDR6','DLSS 3','Low power'],'Latest generation efficient GPU.',4.6],
+[29,'AMD Radeon RX 580 8GB (2nd Hand)','hardware','gpu','PC','AMD',12500,'Used','🟥',['8GB GDDR5'],'Cheapest 8GB card for 1080p.',4.1],
+[30,'AMD Radeon RX 6600 8GB (New)','hardware','gpu','PC','AMD',62000,'New','🟥',['8GB GDDR6','1080p high'],'Strong 1080p performance.',4.6],
+// CPUs
+[31,'AMD Ryzen 5 5600 (New)','hardware','cpu','PC','AMD',26500,'New','🔲',['6C/12T','AM4','Cooler included'],'Best budget gaming CPU.',4.8],
+[32,'AMD Ryzen 5 5600X (2nd Hand)','hardware','cpu','PC','AMD',21000,'Used','🔲',['6C/12T','AM4'],'Tested processor, no cooler.',4.5],
+[33,'AMD Ryzen 7 5700X (New)','hardware','cpu','PC','AMD',39000,'New','🔲',['8C/16T','AM4'],'8 cores for gaming and streaming.',4.7],
+[34,'Intel Core i3-12100F (New)','hardware','cpu','PC','Intel',17500,'New','🔲',['4C/8T','LGA1700'],'Entry gaming CPU.',4.4],
+[35,'Intel Core i5-12400F (New)','hardware','cpu','PC','Intel',29000,'New','🔲',['6C/12T','LGA1700'],'Strong mid-range CPU.',4.7],
+// monitors / peripherals / chairs
+[36,'24" 240Hz Gaming Monitor 1ms (New)','hardware','monitor','PC','Generic',59000,'New','🖵',['240Hz','1ms','1080p IPS','FreeSync'],'Smooth competitive gaming display.',4.6],
+[37,'27" 165Hz QHD Monitor (2nd Hand)','hardware','monitor','PC','Generic',42000,'Used','🖵',['165Hz','1440p','IPS'],'Sharp QHD panel, no dead pixels.',4.5],
+[38,'RGB Mechanical Keyboard (Blue Switch)','hardware','periph','PC','Redragon',8500,'New','⌨️',['Mechanical switches','RGB'],'Tactile clicky keyboard.',4.5],
+[39,'Gaming Mouse 12000 DPI','hardware','periph','PC','Logitech',3500,'New','🖱️',['12000 DPI','6 buttons'],'Lightweight gaming mouse.',4.4],
+[40,'7.1 Gaming Headset with Mic','hardware','periph','PC','HyperX',6500,'New','🎧',['7.1 surround','Detachable mic'],'Works on PC, PS5, Xbox.',4.5],
+[41,'DualSense Controller (2nd Hand)','hardware','periph','PlayStation','Sony',11000,'Used','🎮',['Haptics','Adaptive triggers'],'Original PS5 controller.',4.6],
+[42,'Xbox Wireless Controller (New)','hardware','periph','Xbox','Microsoft',9500,'New','🎮',['Bluetooth','PC compatible'],'Works with Xbox and PC.',4.6],
+[43,'Joy-Con Pair (2nd Hand)','hardware','periph','Nintendo','Nintendo',15000,'Used','🎮',['Motion controls','HD rumble'],'Original Joy-Con L+R.',4.3],
+[44,'Ergonomic Gaming Chair','hardware','chair','PC','Generic',38000,'New','🪑',['Reclining','Lumbar pillow'],'Comfortable PU leather chair.',4.4],
+// software
+[50,'EA Sports FC 26 (PS5 Disc)','software','disc','PlayStation','EA',9500,'New','💿',['PS5','Disc'],'Football game on physical disc.',4.3],
+[51,'God of War Ragnarök (PS4/PS5 Disc)','software','disc','PlayStation','Sony',8500,'New','💿',['PS4/PS5','Disc'],'Story-driven action adventure.',4.9],
+[52,'Grand Theft Auto V (PS4 Disc)','software','disc','PlayStation','Rockstar',3500,'Used','💿',['PS4','Disc'],'Used disc, tested.',4.8],
+[53,'Forza Horizon 5 (Xbox Disc)','software','disc','Xbox','Xbox Game Studios',8000,'New','💿',['Xbox Series X|S','Disc'],'Open-world racing.',4.8],
+[54,'Halo Infinite (Xbox Disc)','software','disc','Xbox','Xbox Game Studios',4500,'Used','💿',['Xbox One / Series','Disc'],'Used, working.',4.4],
+[55,'Mario Kart 8 Deluxe (Switch Cartridge)','software','disc','Nintendo','Nintendo',11500,'New','💿',['Switch','Cartridge'],'Party racing.',4.9],
+[56,'Cyberpunk 2077 (PC Disc/Box)','software','disc','PC','CD Projekt',4000,'New','💿',['PC','Physical box'],'PC box edition.',4.3],
+[57,'Elden Ring (PC Disc)','software','disc','PC','FromSoftware',7000,'New','💿',['PC','Physical'],'Action RPG.',4.8],
+[58,'Xbox Game Pass Ultimate 1 Month Key','software','sub','Xbox','Microsoft',2800,'New','🔑',['Digital code','Instant'],'Instant code delivery to your dashboard.',4.6],
+[59,'PlayStation Plus Essential 3 Months','software','sub','PlayStation','Sony',5500,'New','🔑',['Digital code','Instant'],'Online play and monthly games.',4.7],
+[60,'Steam Wallet Top-up $10 (Digital Code)','software','wallet','PC','Valve',3100,'New','💳',['Digital code','Instant'],'Instant Steam wallet code.',4.8],
+[61,'PSN Wallet Top-up $20 (Digital Code)','software','wallet','PlayStation','Sony',6200,'New','💳',['Digital code','Instant'],'US PSN card code.',4.6],
+[62,'Xbox Gift Card $15 (Digital Code)','software','wallet','Xbox','Microsoft',4700,'New','💳',['Digital code','Instant'],'Redeemable on Xbox and Microsoft Store.',4.5],
+[63,'Nintendo eShop Card $20 (Digital Code)','software','wallet','Nintendo','Nintendo',6200,'New','💳',['Digital code','Instant'],'US eShop credit.',4.5],
+[64,'Hogwarts Legacy PC Key (Digital)','software','digital','PC','Warner Bros',5500,'New','🔑',['Steam key','Instant'],'Choose Standard or Deluxe edition.',4.7],
+[65,'Cyberpunk 2077 Phantom Liberty DLC (Key)','software','dlc','PC','CD Projekt',3900,'New','🧩',['DLC key','Needs base game'],'Expansion pack.',4.8]
+].map(a=>({id:a[0],name:a[1],cat:a[2],type:a[3],plat:a[4],brand:a[5],price:a[6],cond:a[7],em:a[8],specs:a[9],desc:a[10],rating:a[11]}));
+// editions for selected games
+const ED={50:[['Standard',E3[0][1],9500],['Ultimate','Disc + digital bonus pack + early access',14500]],64:[['Standard','Base game key',5500],['Deluxe','Game + dark-arts pack + mount (digital)',7200]],51:[['Standard','Game disc',8500],['Collector','Disc + steelbook + art book + bonus pack',14000]],55:[['Standard','Cartridge only',11500]],57:[['Standard','Game disc',7000],['Deluxe','Game + art book + soundtrack (digital)',9000]]};
+const CATALOG=P;
+
+/* ---------- product images ----------
+   Real photos: put files in an "images" folder next to this file, named by product number
+   (images/1.jpg, images/2.jpg ...). Or paste a link below, e.g. IMG[1]='https://...jpg'.
+   If no photo is found, the built-in illustration is shown instead. */
+const WM='https://commons.wikimedia.org/wiki/Special:FilePath/';
+const IMG={
+  1:WM+'Black_and_white_Playstation_5_base_edition_with_controller.png?width=500',   // PS5 (CC0)
+  2:WM+'Black_and_white_Playstation_5_base_edition_with_controller.png?width=500',
+  3:WM+'Sony-PlayStation4-Pro-Console-FL.png?width=500',                              // PS4 Pro (Evan-Amos, public domain)
+  5:WM+'Sony-PlayStation-3-CECHA01-wController-L.jpg?width=500',                      // PS3 (Evan-Amos, public domain)
+  13:WM+'Nintendo-Switch-Console-Docked-wJoyConRB.jpg?width=500',                     // Switch (Evan-Amos, public domain)
+  19:'https://upload.wikimedia.org/wikipedia/commons/5/5d/Steam_Deck_%28front%29.png' // Steam Deck (Wikimedia Commons)
+};
+const PLC={PlayStation:'#3b82f6',Xbox:'#22c55e',Nintendo:'#ff4d5e','PC':'#a855f7','Handheld PC':'#00d4ff'};
+function art(p){
+  const c=PLC[p.plat]||'#00d4ff',n=(p.name||'').toLowerCase(),t=p.type,D='#1b2040',L='#323a73';
+  let s='';
+  if(n.includes('switch')&&t!=='periph'){
+    s=`<rect x="14" y="22" width="14" height="44" rx="7" fill="#00c3e3"/><rect x="92" y="22" width="14" height="44" rx="7" fill="#ff4554"/><rect x="28" y="20" width="64" height="48" rx="5" fill="${D}" stroke="${L}" stroke-width="2"/><rect x="33" y="25" width="54" height="38" rx="2" fill="${c}" opacity=".35"/><circle cx="21" cy="36" r="3" fill="#0b3b45"/><circle cx="99" cy="52" r="3" fill="#5b1520"/>`;
+  }else if(t==='console'&&/playstation [123]|xbox original|360/.test(n)){
+    s=`<rect x="12" y="30" width="96" height="34" rx="6" fill="${D}" stroke="${c}" stroke-width="2"/><rect x="20" y="40" width="56" height="4" rx="2" fill="${L}"/><rect x="20" y="48" width="56" height="2" rx="1" fill="${L}"/><circle cx="92" cy="42" r="6" fill="${c}"/><circle cx="92" cy="42" r="2.5" fill="${D}"/><rect x="82" y="55" width="16" height="3" rx="1.5" fill="${L}"/>`;
+  }else if(t==='console'){
+    s=`<rect x="34" y="8" width="52" height="70" rx="12" fill="${D}" stroke="${c}" stroke-width="2"/><rect x="41" y="13" width="10" height="60" rx="5" fill="${c}" opacity=".85"/><rect x="58" y="20" width="22" height="3" rx="1.5" fill="${L}"/><rect x="58" y="27" width="22" height="3" rx="1.5" fill="${L}"/><circle cx="69" cy="64" r="4" fill="${c}"/><rect x="28" y="78" width="64" height="4" rx="2" fill="${L}"/>`;
+  }else if(t==='handheld'){
+    s=`<rect x="8" y="24" width="104" height="44" rx="16" fill="${D}" stroke="${c}" stroke-width="2"/><rect x="30" y="28" width="60" height="36" rx="3" fill="${c}" opacity=".4"/><rect x="34" y="32" width="52" height="28" rx="2" fill="#0a0b14"/><circle cx="19" cy="46" r="6" fill="${L}"/><circle cx="101" cy="46" r="6" fill="${L}"/><circle cx="96" cy="38" r="2.5" fill="${c}"/><circle cx="104" cy="46" r="2.5" fill="${c}"/>`;
+  }else if(t==='pc'){
+    s=`<rect x="36" y="6" width="48" height="78" rx="5" fill="${D}" stroke="${c}" stroke-width="2"/><rect x="41" y="12" width="38" height="52" rx="3" fill="${c}" opacity=".18"/><circle cx="60" cy="28" r="10" fill="none" stroke="${c}" stroke-width="2"/><circle cx="60" cy="28" r="2.5" fill="${c}"/><circle cx="60" cy="50" r="8" fill="none" stroke="${c}" stroke-width="2"/><rect x="42" y="70" width="36" height="3" rx="1.5" fill="${c}"/><circle cx="60" cy="78" r="2" fill="${c}"/>`;
+  }else if(t==='gpu'){
+    s=`<rect x="8" y="26" width="104" height="38" rx="5" fill="${D}" stroke="${c}" stroke-width="2"/><circle cx="38" cy="45" r="14" fill="#0a0b14" stroke="${c}" stroke-width="2"/><circle cx="82" cy="45" r="14" fill="#0a0b14" stroke="${c}" stroke-width="2"/><circle cx="38" cy="45" r="3" fill="${c}"/><circle cx="82" cy="45" r="3" fill="${c}"/><path d="M38 31v28M24 45h28M82 31v28M68 45h28" stroke="${L}" stroke-width="2"/><rect x="14" y="64" width="60" height="6" fill="#d4a017"/><rect x="2" y="28" width="6" height="34" fill="${L}"/>`;
+  }else if(t==='cpu'){
+    let pins='';for(let i=0;i<6;i++){const o=40+i*8;pins+=`<rect x="${o}" y="14" width="3" height="6" fill="#d4a017"/><rect x="${o}" y="70" width="3" height="6" fill="#d4a017"/><rect x="29" y="${o-22}" width="6" height="3" fill="#d4a017"/><rect x="85" y="${o-22}" width="6" height="3" fill="#d4a017"/>`}
+    s=pins+`<rect x="35" y="20" width="50" height="50" rx="5" fill="${D}" stroke="${c}" stroke-width="2"/><rect x="44" y="29" width="32" height="32" rx="3" fill="${c}" opacity=".35"/><text x="60" y="50" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">CPU</text>`;
+  }else if(t==='monitor'){
+    s=`<rect x="10" y="8" width="100" height="58" rx="4" fill="${D}" stroke="${c}" stroke-width="2"/><rect x="15" y="13" width="90" height="48" rx="2" fill="${c}" opacity=".3"/><path d="M15 61l30-28 20 18 14-12 26 22z" fill="${c}" opacity=".35"/><rect x="54" y="66" width="12" height="10" fill="${L}"/><rect x="36" y="76" width="48" height="5" rx="2.5" fill="${L}"/>`;
+  }else if(t==='periph'){
+    if(n.includes('keyboard')){let k='';for(let r=0;r<3;r++)for(let i=0;i<10;i++)k+=`<rect x="${12+i*9.6}" y="${28+r*12}" width="8" height="9" rx="1.5" fill="${[c,'#ff3d71','#00ff9c'][(i+r)%3]}" opacity=".8"/>`;s=`<rect x="6" y="22" width="108" height="46" rx="5" fill="${D}" stroke="${L}" stroke-width="2"/>`+k;}
+    else if(n.includes('mouse')){s=`<path d="M60 12c-18 0-26 14-26 32 0 20 10 34 26 34s26-14 26-34c0-18-8-32-26-32z" fill="${D}" stroke="${c}" stroke-width="2"/><path d="M60 12v28M34 40h52" stroke="${L}" stroke-width="2"/><rect x="56" y="22" width="8" height="12" rx="4" fill="${c}"/>`;}
+    else if(n.includes('headset')){s=`<path d="M26 52V44a34 34 0 0168 0v8" fill="none" stroke="${c}" stroke-width="6" stroke-linecap="round"/><rect x="16" y="46" width="18" height="30" rx="8" fill="${D}" stroke="${c}" stroke-width="2"/><rect x="86" y="46" width="18" height="30" rx="8" fill="${D}" stroke="${c}" stroke-width="2"/><path d="M25 76q0 10 20 10" fill="none" stroke="${L}" stroke-width="3"/><circle cx="48" cy="86" r="3" fill="${c}"/>`;}
+    else{s=`<path d="M30 26h60c14 0 20 16 22 34 1 10-8 14-16 6l-8-10H32l-8 10c-8 8-17 4-16-6 2-18 8-34 22-34z" fill="${D}" stroke="${c}" stroke-width="2"/><circle cx="40" cy="42" r="7" fill="${L}"/><circle cx="76" cy="52" r="7" fill="${L}"/><circle cx="90" cy="38" r="2.5" fill="${c}"/><circle cx="82" cy="32" r="2.5" fill="#ff3d71"/><path d="M26 42h8M30 38v8" stroke="${c}" stroke-width="2"/>`;}
+  }else if(t==='chair'){
+    s=`<rect x="40" y="6" width="40" height="42" rx="10" fill="${D}" stroke="${c}" stroke-width="2"/><rect x="48" y="12" width="24" height="12" rx="4" fill="${c}" opacity=".6"/><rect x="34" y="46" width="52" height="12" rx="6" fill="${D}" stroke="${c}" stroke-width="2"/><rect x="57" y="58" width="6" height="14" fill="${L}"/><path d="M30 80h60M60 72l-28 8M60 72l28 8" stroke="${L}" stroke-width="3" stroke-linecap="round"/><rect x="28" y="40" width="8" height="14" rx="3" fill="${L}"/><rect x="84" y="40" width="8" height="14" rx="3" fill="${L}"/>`;
+  }else if(t==='disc'){
+    const cart=n.includes('cartridge');
+    s=cart?`<rect x="34" y="10" width="52" height="64" rx="5" fill="${D}" stroke="${c}" stroke-width="2"/><rect x="40" y="16" width="40" height="30" rx="2" fill="${c}" opacity=".45"/><rect x="42" y="62" width="36" height="10" fill="${L}"/>`:`<rect x="30" y="6" width="60" height="78" rx="4" fill="${D}" stroke="${c}" stroke-width="2"/><rect x="30" y="6" width="60" height="12" fill="${c}"/><circle cx="60" cy="48" r="20" fill="#cfd6ff"/><circle cx="60" cy="48" r="20" fill="none" stroke="${c}" stroke-width="2"/><circle cx="60" cy="48" r="6" fill="${D}"/><circle cx="60" cy="48" r="13" fill="none" stroke="#fff" stroke-opacity=".5"/>`;
+  }else{
+    const g=t==='wallet'?'$':t==='sub'?'+':t==='dlc'?'★':'🔑';
+    s=`<rect x="14" y="16" width="92" height="58" rx="8" fill="${D}" stroke="${c}" stroke-width="2"/><rect x="14" y="26" width="92" height="10" fill="${c}" opacity=".8"/><text x="36" y="62" font-size="26" fill="${c}" font-weight="bold" text-anchor="middle">${g}</text><rect x="56" y="46" width="38" height="5" rx="2.5" fill="${L}"/><rect x="56" y="57" width="26" height="5" rx="2.5" fill="${L}"/>`;
+  }
+  return `<svg viewBox="0 0 120 90" xmlns="http://www.w3.org/2000/svg" role="img"><ellipse cx="60" cy="86" rx="38" ry="3" fill="#000" opacity=".35"/>${s}</svg>`;
+}
+function pic(p){return art(p)+`<img class="pimg" loading="lazy" alt="${String(p.name).replace(/"/g,'')}" src="${IMG[p.id]||'images/'+p.id+'.jpg'}" onerror="this.remove()">`}
+function thumb(i){const p=P.find(x=>x.id===i.id)||{id:0,type:i.type,plat:'PC',name:i.name};return pic(p)}
+
+/* ---------- state ---------- */
+let cart=store.get('cart',[]),orders=store.get('orders',[]),user=store.get('user',null),points=store.get('points',0),reviews=store.get('reviews',[
+ {n:'Hamza A.',s:5,t:'Bought a used PS5 Slim, works perfectly. Fast delivery in Karachi.',p:''},
+ {n:'Sara K.',s:4,t:'RTX 3060 arrived sealed and tested. Good price.',p:''}]);
+let buyNow=null,redeem=false;
+
+/* ---------- filters ---------- */
+const brands=[...new Set(P.map(p=>p.brand))].sort();
+$('#fBrand').innerHTML+=brands.map(b=>`<option>${b}</option>`).join('');
+const SPECS=['240Hz','165Hz','Mechanical','RGB','OLED','4K','SSD','Ray tracing','Digital code'];
+$('#specChips').innerHTML=SPECS.map(s=>`<button class="chip" data-spec="${s}">${s}</button>`).join('');
+const F={q:'',cat:'',type:'',plat:'',brand:'',cond:'',max:100000,sort:'rel',spec:''};
+function applyF(){
+  let r=P.filter(p=>{
+    const hay=(p.name+' '+p.brand+' '+p.plat+' '+p.specs.join(' ')+' '+p.type).toLowerCase();
+    return (!F.q||F.q.toLowerCase().split(/\s+/).every(w=>hay.includes(w)))&&(!F.cat||p.cat===F.cat)&&(!F.type||p.type===F.type)&&(!F.plat||p.plat===F.plat)&&(!F.brand||p.brand===F.brand)&&(!F.cond||p.cond===F.cond)&&p.price<=F.max&&(!F.spec||hay.includes(F.spec.toLowerCase()));
+  });
+  if(F.sort==='pa')r.sort((a,b)=>a.price-b.price);else if(F.sort==='pd')r.sort((a,b)=>b.price-a.price);else if(F.sort==='rt')r.sort((a,b)=>b.rating-a.rating);
+  $('#count').textContent=r.length+' product'+(r.length===1?'':'s')+' found';
+  $('#grid').innerHTML=r.length?r.map((p,i)=>`
+   <div class="card" style="transition-delay:${Math.min(i,10)*40}ms">
+    <div class="pic">${pic(p)}<span class="tag ${p.cond==='New'?'new':'used'}">${p.cond==='New'?'NEW':'2ND HAND'}</span><span class="tag pl">${p.plat}</span></div>
+    <div class="info"><h4 onclick="openDetail(${p.id})">${p.name}</h4>
+     <div class="meta">${p.specs.slice(0,3).join(' • ')}</div>
+     <div class="stars">${'★'.repeat(Math.round(p.rating))}<span class="meta"> ${p.rating}</span></div>
+     <div class="price">${fmt(p.price)}${ED[p.id]?'<small class="meta"> from</small>':''}</div>
+     <div class="acts"><button class="btn sm" onclick="addCart(${p.id})">🛒 Add</button><button class="btn pri sm" onclick="startBuyNow(${p.id})">Buy Now</button></div>
+    </div></div>`).join(''):'<div class="empty">😕 No products match. Try resetting the filters.</div>';
+  requestAnimationFrame(()=>$$('.card').forEach(c=>c.classList.add('show')));
+  $$('[data-spec]').forEach(c=>c.classList.toggle('on',c.dataset.spec===F.spec));
+}
+function bind(id,key,ev='input'){$(id).addEventListener(ev,e=>{F[key]=key==='max'?+e.target.value:e.target.value;if(key==='max')$('#pv').textContent=fmt(F.max);if(id==='#fSearch')$('#navSearch').value=F.q;applyF()})}
+bind('#fSearch','q');bind('#fCat','cat','change');bind('#fType','type','change');bind('#fPlat','plat','change');bind('#fBrand','brand','change');bind('#fCond','cond','change');bind('#fPrice','max');bind('#fSort','sort','change');
+$('#navSearch').addEventListener('input',e=>{F.q=e.target.value;$('#fSearch').value=F.q;applyF();if(F.q.length===1)location.hash='#shop'});
+$('#navSearch').addEventListener('keydown',e=>{if(e.key==='Enter')location.hash='#shop'});
+$('#specChips').addEventListener('click',e=>{const s=e.target.dataset.spec;if(!s)return;F.spec=F.spec===s?'':s;applyF()});
+$('#reset').onclick=()=>{Object.assign(F,{q:'',cat:'',type:'',plat:'',brand:'',cond:'',max:100000,sort:'rel',spec:''});['#fSearch','#fCat','#fType','#fPlat','#fBrand','#fCond','#fSort'].forEach(i=>$(i).value=i==='#fSort'?'rel':'');$('#fPrice').value=100000;$('#pv').textContent=fmt(100000);$('#navSearch').value='';applyF()};
+$$('[data-quick]').forEach(b=>b.addEventListener('click',()=>{const [k,v]=b.dataset.quick.split(':');$('#reset').click();F[k]=v;$('#fType').value=v;applyF();document.getElementById('shop').scrollIntoView({behavior:'smooth'})}));
+
+/* ---------- detail modal ---------- */
+function openDetail(id){
+  const p=P.find(x=>x.id===id),ed=ED[id];
+  $('#mDetail').innerHTML=`<button class="x" data-close>✕</button><div class="pic" style="height:230px;border-radius:14px;margin-bottom:12px">${pic(p)}</div><h3>${p.name}</h3>
+  <p class="meta">${p.brand} • ${p.plat} • ${p.cond==='New'?'Brand new':'2nd hand (tested)'} • ⭐ ${p.rating}</p><p style="margin:10px 0">${p.desc}</p>
+  <div class="chips">${p.specs.map(s=>`<span class="chip">${s}</span>`).join('')}</div>
+  ${ed?`<h4 style="margin-top:14px">Edition breakdown</h4><table><tr><th>Edition</th><th>What's included</th><th>Price</th><th></th></tr>${ed.map((e,i)=>`<tr><td><b>${e[0]}</b></td><td>${e[1]}</td><td class="ok">${fmt(e[2])}</td><td><button class="btn sm" onclick="addCart(${id},${i})">Add</button></td></tr>`).join('')}</table>`:`<div class="price" style="margin:14px 0">${fmt(p.price)}</div>`}
+  <div class="acts"><button class="btn" onclick="addCart(${id})">🛒 Add to Cart</button><button class="btn pri" onclick="startBuyNow(${id})">Buy Now</button></div>`;
+  openO('#oDetail');
+}
+function openO(s){$(s).classList.add('open')}
+function closeAll(){$$('.overlay').forEach(o=>o.classList.remove('open'))}
+document.addEventListener('click',e=>{if(e.target.matches('[data-close]')||e.target.classList.contains('overlay'))closeAll();if(e.target.matches('[data-closedrawer]'))$('#drawer').classList.remove('open')});
+
+/* ---------- cart ---------- */
+function itemFor(id,ed){const p=P.find(x=>x.id===id);if(ed!=null&&ED[id]){const e=ED[id][ed];return{key:id+'-'+ed,id,name:p.name+' ('+e[0]+')',price:e[2],em:p.em,type:p.type,qty:1}}return{key:id+'-d',id,name:p.name,price:p.price,em:p.em,type:p.type,qty:1}}
+function addCart(id,ed){const it=itemFor(id,ed),ex=cart.find(c=>c.key===it.key);ex?ex.qty++:cart.push(it);saveCart();toast('Added to cart ✔');const b=$('#cartCount');b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump')}
+function saveCart(){store.set('cart',cart);renderCart()}
+function totals(items){const sub=items.reduce((s,i)=>s+i.price*i.qty,0),physical=items.some(i=>!isDigital(i)),ship=!physical||sub>=20000||sub===0?0:500;let disc=0;if(redeem&&points>=100){disc=Math.min(Math.floor(points/100)*100,sub);}return{sub,ship,disc,total:sub+ship-disc}}
+const isDigital=i=>['digital','wallet','sub','dlc'].includes(i.type);
+function renderCart(){
+  $('#cartCount').textContent=cart.reduce((s,i)=>s+i.qty,0);
+  $('#cartItems').innerHTML=cart.length?cart.map(i=>`<div class="ci"><div class="em">${thumb(i)}</div><div><b style="font-size:.9rem">${i.name}</b><div class="meta">${fmt(i.price)}</div><div class="qty"><button onclick="qty('${i.key}',-1)">−</button><b>${i.qty}</b><button onclick="qty('${i.key}',1)">+</button></div></div><button class="btn sm" onclick="rm('${i.key}')">🗑</button></div>`).join(''):'<p class="meta" style="text-align:center;margin-top:40px">Your cart is empty 🎮</p>';
+  const t=totals(cart);$('#cartTotals').innerHTML=`<div class="row"><span>Subtotal</span><b>${fmt(t.sub)}</b></div><div class="row"><span>Delivery</span><b>${t.ship?fmt(t.ship):'FREE'}</b></div>${t.disc?`<div class="row ok"><span>Points discount</span><b>-${fmt(t.disc)}</b></div>`:''}<div class="row" style="font-size:1.15rem"><span>Total</span><b class="ok">${fmt(t.total)}</b></div>`;
+}
+function qty(k,d){const i=cart.find(c=>c.key===k);if(!i)return;i.qty+=d;if(i.qty<=0)cart=cart.filter(c=>c.key!==k);saveCart()}
+function rm(k){cart=cart.filter(c=>c.key!==k);saveCart()}
+$('#cartBtn').onclick=()=>$('#drawer').classList.add('open');
+$('#clearCart').onclick=()=>{cart=[];saveCart();toast('Cart cleared')};
+$('#goCheckout').onclick=()=>{if(!cart.length)return toast('Your cart is empty',1);buyNow=null;openCheckout(cart)};
+
+/* ---------- checkout ---------- */
+let coItems=[];
+function startBuyNow(id){const it=itemFor(id);buyNow=[it];closeAll();openCheckout(buyNow)}
+function openCheckout(items){
+  coItems=items;closeAll();$('#drawer').classList.remove('open');
+  if(user){$('#coName').value=$('#coName').value||user.name}
+  $('#coItems').innerHTML=items.map(i=>`<div class="row"><span>${i.em} ${i.name} × ${i.qty}</span><b>${fmt(i.price*i.qty)}</b></div>`).join('');
+  const t=totals(items);$('#coTotals').innerHTML=`<hr style="border-color:var(--line);margin:8px 0"><div class="row"><span>Delivery</span><b>${t.ship?fmt(t.ship):'FREE'}</b></div>${t.disc?`<div class="row ok"><span>Points discount</span><b>-${fmt(t.disc)}</b></div>`:''}<div class="row" style="font-size:1.15rem"><span>Total</span><b class="ok">${fmt(t.total)}</b></div>`;
+  openO('#oCheck');
+}
+function genCode(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s='';for(let i=0;i<15;i++){s+=c[Math.floor(Math.random()*c.length)];if(i%5===4&&i<14)s+='-'}return s}
+$('#coPlace').onclick=()=>{
+  const name=$('#coName').value.trim(),phone=$('#coPhone').value.trim(),addr=$('#coAddr').value.trim();
+  const physical=coItems.some(i=>!isDigital(i));
+  if(!name)return toast('Please enter your name',1);
+  if(!/^[0-9+\-\s]{10,15}$/.test(phone))return toast('Enter a valid phone number',1);
+  if(physical&&addr.length<6)return toast('Please enter your delivery address',1);
+  const t=totals(coItems),pm=document.querySelector('input[name=pm]:checked').value;
+  const order={id:'PP'+Date.now().toString().slice(-7),at:Date.now(),name,phone,addr,city:$('#coCity').value,pm,total:t.total,
+    items:coItems.map(i=>({name:i.name,qty:i.qty,price:i.price,digital:isDigital(i),codes:isDigital(i)?Array.from({length:i.qty},genCode):[]}))};
+  orders.unshift(order);store.set('orders',orders);
+  if(redeem&&t.disc){points-=Math.floor(t.disc/100)*100}
+  points+=Math.floor(t.total/100);store.set('points',points);redeem=false;
+  if(coItems===cart||!buyNow){cart=[];saveCart()}
+  buyNow=null;updPoints();closeAll();toast('Order '+order.id+' placed! 🎉');
+  setTimeout(()=>openAccount('orders'),500);
+};
+
+/* ---------- account ---------- */
+function updUser(){$('#accName').textContent=user?user.name.split(' ')[0]:'Login'}
+function openAccount(tab){
+  if(!user){
+    $('#mAcc').innerHTML=`<button class="x" data-close>✕</button><h3>Login / Register</h3><p class="meta">Demo account stored in your browser.</p><input id="aName" placeholder="Your name" style="margin:10px 0"><input id="aMail" placeholder="Email" type="email"><button class="btn pri" id="aGo" style="width:100%;margin-top:12px">Continue</button>`;
+    openO('#oAcc');
+    $('#aGo').onclick=()=>{const n=$('#aName').value.trim(),m=$('#aMail').value.trim();if(!n||!/\S+@\S+\.\S+/.test(m))return toast('Enter name and a valid email',1);user={name:n,email:m};store.set('user',user);updUser();toast('Welcome, '+n+'!');openAccount(tab)};
+    return;
+  }
+  const stages=['Placed','Confirmed','Packed','Shipped','Delivered'];
+  const stg=o=>Math.min(4,Math.floor((Date.now()-o.at)/60000)); // demo: 1 stage per minute
+  $('#mAcc').innerHTML=`<button class="x" data-close>✕</button><h3>👤 ${user.name}'s Dashboard</h3><p class="meta">${user.email} • ⭐ ${points} loyalty points</p>
+  <h4 style="margin:14px 0 6px">My Orders &amp; Tracking</h4>
+  ${orders.length?orders.map(o=>{const s=stg(o);const phys=o.items.some(i=>!i.digital);return`<div class="rev"><b>#${o.id}</b> <span class="meta">${new Date(o.at).toLocaleString()} • ${o.pm}</span><div class="row"><span>${o.items.map(i=>i.name+' ×'+i.qty).join(', ')}</span><b class="ok">${fmt(o.total)}</b></div>
+   ${phys?`<div class="steps">${stages.map((x,i)=>`<i class="${i<=s?'on':''}"></i>`).join('')}</div><div class="meta">Status: <b class="ok">${stages[s]}</b> (demo tracking updates every minute)</div>`:''}
+   ${o.items.filter(i=>i.digital).map(i=>`<div style="margin-top:6px"><span class="meta">${i.name}:</span> ${i.codes.map((c,ci)=>`<span class="code" id="cd${o.id}${ci}" data-c="${c}">••••• ••••• •••••</span> <button class="btn sm" onclick="showCode('cd${o.id}${ci}')">Reveal code</button>`).join('<br>')}</div>`).join('')}</div>`}).join(''):'<p class="meta">No orders yet. Start shopping!</p>'}
+  <button class="btn" id="logout" style="margin-top:10px">Logout</button>`;
+  openO('#oAcc');
+  $('#logout').onclick=()=>{user=null;store.set('user',null);updUser();closeAll();toast('Logged out')};
+}
+function showCode(id){const e=document.getElementById(id);e.textContent=e.dataset.c}
+$('#accBtn').onclick=()=>openAccount();
+$('#fTrack').onclick=e=>{e.preventDefault();openAccount()};
+
+/* ---------- points ---------- */
+function updPoints(){$('#myPts').textContent=points}
+$('#redeemBtn').onclick=()=>{if(points<100)return toast('You need at least 100 points',1);redeem=true;renderCart();toast('Points will be applied at checkout');$('#drawer').classList.add('open')};
+
+/* ---------- calendar with countdowns ---------- */
+const DAY=864e5,base=new Date();base.setHours(12,0,0,0);
+const EV=[['🎮','PS5 Slim Used restock',3,'Restock'],['🕹️','Switch 2 bundle with game pre-order',9,'Pre-order'],['🖥️','RTX 3060 PC build drop',14,'Hardware drop'],['💿','New game disc shipment (PS5/Xbox)',21,'New arrivals'],['🔑','Game Pass key flash sale',5,'Sale'],['🎧','Headset and keyboard restock',28,'Restock'],['🏆','Winter Gaming Sale begins',40,'Sale']];
+$('#cal').innerHTML=EV.map((e,i)=>`<div class="ev"><div style="font-size:2rem">${e[0]}</div><b>${e[1]}</b><div class="meta">${e[3]} • ${new Date(+base+e[2]*DAY).toDateString()}</div><div class="cd" data-t="${+base+e[2]*DAY}"></div><button class="btn sm" style="margin-top:10px" onclick="toast('Reminder set for ${e[1].replace(/'/g,'')}')">🔔 Remind me</button></div>`).join('');
+function tick(){$$('.cd').forEach(c=>{let d=+c.dataset.t-Date.now();if(d<0)d=0;const v=[Math.floor(d/DAY),Math.floor(d/36e5)%24,Math.floor(d/6e4)%60,Math.floor(d/1e3)%60],l=['days','hrs','min','sec'];c.innerHTML=v.map((x,i)=>`<div><b>${String(x).padStart(2,'0')}</b><small>${l[i]}</small></div>`).join('')})}
+tick();setInterval(tick,1000);
+
+/* ---------- trade-in ---------- */
+const TI=[['PlayStation 4 Slim',22000],['PlayStation 4 Pro',30000],['PlayStation 5',75000],['Xbox One',18000],['Xbox 360',9000],['Nintendo Switch V1',32000],['Nintendo Switch OLED',48000],['Gaming laptop (older)',35000],['GTX 1060 6GB',11000],['GTX 1660 Super',22000],['Ryzen 5 3600',12000],['Old game discs (per 5 discs)',5000]];
+$('#tiDev').innerHTML=TI.map((t,i)=>`<option value="${i}">${t[0]} (up to ${fmt(t[1])})</option>`).join('');
+$('#tiNew').innerHTML=P.filter(p=>p.price>=15000).map(p=>`<option value="${p.id}">${p.name} - ${fmt(p.price)}</option>`).join('');
+$('#tiGo').onclick=()=>{const d=TI[+$('#tiDev').value],f=+$('#tiCond').value,v=Math.round(d[1]*f/100)*100,p=P.find(x=>x.id==$('#tiNew').value),pay=Math.max(0,p.price-v);
+  $('#tiRes').innerHTML=`<b>Estimated trade-in value:</b> <span class="ok" style="font-size:1.4rem">${fmt(v)}</span><br>Upgrade item: ${p.name} (${fmt(p.price)})<br><b>You pay about: <span class="ok">${fmt(pay)}</span></b><br><small class="meta">Final value confirmed after inspection.</small><br><button class="btn pri sm" style="margin-top:8px" onclick="addCart(${p.id})">Add upgrade to cart</button>`};
+
+/* ---------- PC builder ---------- */
+const PARTS={
+ cpu:[['Ryzen 5 5600',26500,'AM4',65],['Ryzen 7 5700X',39000,'AM4',65],['Core i3-12100F',17500,'LGA1700',58],['Core i5-12400F',29000,'LGA1700',65]],
+ mb:[['B450M (AM4, DDR4)',14000,'AM4','DDR4','mATX'],['B550M (AM4, DDR4)',20000,'AM4','DDR4','mATX'],['H610M (LGA1700, DDR4)',16500,'LGA1700','DDR4','mATX'],['B660 ATX (LGA1700, DDR5)',28000,'LGA1700','DDR5','ATX']],
+ ram:[['16GB DDR4 3200',8500,'DDR4'],['32GB DDR4 3200',15500,'DDR4'],['16GB DDR5 5200',12500,'DDR5']],
+ gpu:[['GTX 1660 Super',29000,125],['RTX 3050 6GB',49000,130],['RTX 3060 12GB',58000,170],['RX 6600',62000,132]],
+ case:[['Budget mATX case',6500,'mATX'],['ATX mid-tower RGB',11000,'ATX']],
+ psu:[['450W 80+',7500,450],['550W 80+ Bronze',9500,550],['650W 80+ Bronze',12500,650]]};
+const LBL={cpu:'Processor',mb:'Motherboard',ram:'Memory',gpu:'Graphics',case:'Case',psu:'Power supply'};
+$('#bForm').innerHTML=Object.keys(PARTS).map(k=>`<div class="build-row"><label>${LBL[k]}</label><select data-b="${k}">${PARTS[k].map((p,i)=>`<option value="${i}">${p[0]} - ${fmt(p[1])}</option>`).join('')}</select></div>`).join('');
+function build(){
+  const s={};$$('[data-b]').forEach(e=>s[e.dataset.b]=PARTS[e.dataset.b][+e.value]);
+  const warn=[],ok=[];let tot=Object.values(s).reduce((a,p)=>a+p[1],0);
+  s.cpu[2]===s.mb[2]?ok.push('CPU socket matches motherboard ('+s.cpu[2]+')'):warn.push('CPU socket '+s.cpu[2]+' does not fit board socket '+s.mb[2]);
+  s.ram[2]===s.mb[3]?ok.push('RAM type matches ('+s.ram[2]+')'):warn.push('Board needs '+s.mb[3]+' but RAM is '+s.ram[2]);
+  (s.case[2]==='ATX'||s.mb[4]==='mATX')?ok.push('Motherboard fits the case'):warn.push('ATX board will not fit an mATX case');
+  const need=s.cpu[3]+s.gpu[2]+100;
+  s.psu[2]>=need*1.3?ok.push('PSU has good headroom ('+s.psu[2]+'W for ~'+need+'W load)'):warn.push('PSU may be too weak: ~'+need+'W load, recommend '+Math.ceil(need*1.3/50)*50+'W+');
+  if(s.cpu[0].includes('12100')&&s.gpu[0].includes('3060'))warn.push('Tip: i3 may bottleneck an RTX 3060 in some games');
+  $('#bRes').innerHTML=`<b>Total: <span class="ok" style="font-size:1.3rem">${fmt(tot)}</span></b> ${tot>100000?'<span class="bad">(over Rs. 100k budget)</span>':''}<hr style="border-color:var(--line);margin:8px 0">${warn.map(w=>'<div class="bad">⚠ '+w+'</div>').join('')}${ok.map(w=>'<div class="ok">✔ '+w+'</div>').join('')}`;
+  return{s,tot,warn};
+}
+$('#bForm').addEventListener('change',build);build();
+$('#bAdd').onclick=()=>{const b=build();if(b.warn.some(w=>!w.startsWith('Tip')))return toast('Fix compatibility problems first',1);const ex=cart.find(c=>c.key==='custom');const name='Custom PC: '+b.s.cpu[0]+' + '+b.s.gpu[0];if(ex){ex.qty++;ex.price=b.tot;ex.name=name}else cart.push({key:'custom',id:0,name,price:b.tot,em:'🖥️',type:'pc',qty:1});saveCart();toast('Custom PC added to cart ✔')};
+
+/* ---------- reviews ---------- */
+let stars=5;
+function drawStars(){$('#starPick').innerHTML=[1,2,3,4,5].map(i=>`<span class="${i<=stars?'on':''}" data-s="${i}">★</span>`).join('')}
+$('#starPick').addEventListener('click',e=>{if(e.target.dataset.s){stars=+e.target.dataset.s;drawStars()}});drawStars();
+function drawReviews(){$('#revList').innerHTML=reviews.map(r=>`<div class="rev"><b>${esc(r.n)}</b> <span class="stars">${'★'.repeat(r.s)}${'☆'.repeat(5-r.s)}</span><p class="meta" style="color:var(--txt)">${esc(r.t)}</p>${r.p?`<img src="${r.p}" alt="setup photo">`:''}</div>`).join('')}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+$('#rvSend').onclick=()=>{
+  const n=$('#rvName').value.trim()||(user&&user.name),t=$('#rvText').value.trim();if(!n||!t)return toast('Add your name and review text',1);
+  const f=$('#rvPhoto').files[0];
+  const done=p=>{reviews.unshift({n,s:stars,t,p});store.set('reviews',reviews.slice(0,15));drawReviews();$('#rvText').value='';$('#rvPhoto').value='';points+=20;store.set('points',points);updPoints();toast('Thanks! +20 loyalty points')};
+  if(f){if(f.size>1.5e6)return toast('Photo must be under 1.5MB',1);const r=new FileReader();r.onload=()=>done(r.result);r.readAsDataURL(f)}else done('');
+};
+drawReviews();
+
+/* ---------- chat ---------- */
+const QA=[[/ship|deliver|track/i,'We deliver nationwide in 2-5 working days. Free over Rs. 20,000. Track from your dashboard (👤 top right).'],[/warrant/i,'New hardware: up to 12 months. Used: 7 days checking + 1 month service warranty.'],[/pay|cod|jazz|easy|card/i,'We accept COD, JazzCash, Easypaisa, cards and bank transfer.'],[/return|refund/i,'7-day return if not as described. Opened digital codes are not returnable.'],[/code|key|digital/i,'Digital codes appear instantly in your dashboard after ordering. Press "Reveal code".'],[/ps5|playstation/i,'Try the PlayStation filter in the store. We have used PS5 Slim from Rs. 92,000.'],[/pc|gpu|build/i,'Use our Build-a-PC tool - it flags incompatible parts automatically.'],[/hi|hello|salam|hey/i,'Hello! 👋 How can I help with your gaming gear today?']];
+function say(t,c){const d=document.createElement('div');d.className='m '+c;d.textContent=t;$('#msgs').appendChild(d);$('#msgs').scrollTop=1e9}
+function ask(q){say(q,'me');setTimeout(()=>{const a=QA.find(x=>x[0].test(q));say(a?a[1]:'Thanks! An agent will reply on WhatsApp shortly. Meanwhile check our FAQ section.','bot')},500)}
+say('Hi! 👋 Ask me about delivery, warranty, payments or products.','bot');
+$('#quick').innerHTML=['Delivery','Warranty','Payment methods','Digital codes'].map(q=>`<button class="chip">${q}</button>`).join('');
+$('#quick').onclick=e=>{if(e.target.classList.contains('chip'))ask(e.target.textContent)};
+$('#chatFab').onclick=()=>$('#chat').classList.toggle('open');
+$('#fChat').onclick=e=>{e.preventDefault();$('#chat').classList.add('open')};
+function send(){const v=$('#chatIn').value.trim();if(v){ask(v);$('#chatIn').value=''}}
+$('#chatSend').onclick=send;$('#chatIn').addEventListener('keydown',e=>{if(e.key==='Enter')send()});
+
+/* ---------- animations ---------- */
+$('#mq').innerHTML=Array(2).fill('🔥 All prices under Rs. 100,000 &nbsp;•&nbsp; 🎮 New &amp; 2nd hand &nbsp;•&nbsp; 🚚 Free delivery over Rs. 20,000 &nbsp;•&nbsp; 🔑 Instant digital codes &nbsp;•&nbsp; 💳 COD / JazzCash / Easypaisa &nbsp;•&nbsp; ').join('');
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}}),{threshold:.08});
+$$('.reveal').forEach(r=>io.observe(r));
+$$('[data-count]').forEach(el=>{const t=+el.dataset.count;let n=0;const iv=setInterval(()=>{n+=Math.ceil(t/40);if(n>=t){n=t;clearInterval(iv)}el.textContent=n+(t===60?'+':'')},35)});
+
+/* ---------- init ---------- */
+updUser();updPoints();renderCart();applyF();
+</script>
+</body>
+</html>
